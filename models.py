@@ -10,8 +10,7 @@ class Course(Base):
     title = Column(String, nullable=False, unique=True)
     description = Column(String, nullable=False)
 
-    # Relationships
-    lessons = relationship("Lesson", back_populates="course")  # Video lessons
+    lessons = relationship("Lesson", back_populates="course")
 
 
 class Lesson(Base):
@@ -22,17 +21,15 @@ class Lesson(Base):
     content = Column(String, nullable=False)
     course_id = Column(Integer, ForeignKey("courses.id"))
 
-    # Relationships
     course = relationship("Course", back_populates="lessons")
-    quizzes = relationship("Quiz", back_populates="lesson")  # One-to-Many (Lesson → Quizzes)
+    quizzes = relationship("Quiz", back_populates="lesson")
 
 
 class Quiz(Base):
     __tablename__ = "quizzes"
 
     id = Column(Integer, primary_key=True, index=True)
-    lesson_id = Column(Integer, ForeignKey("lessons.id"), nullable=False)  # Link to Lesson
-    questions = Column(JSON, nullable=False)  # JSON format
+    lesson_id = Column(Integer, ForeignKey("lessons.id"), nullable=False)
+    questions = Column(JSON, nullable=False)
 
-    # Relationships
     lesson = relationship("Lesson", back_populates="quizzes")

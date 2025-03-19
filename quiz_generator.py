@@ -6,7 +6,6 @@ genai.configure(api_key="AIzaSyA53JF_Q2FgfbAg0Lur4--eBkq_tscBJDY")
 def generate_quiz(lesson_content):
     """Generate a quiz using Gemini AI"""
 
-    # Use the correct model name
     model = genai.GenerativeModel("gemini-1.5-pro-latest")
 
     prompt = f"""
@@ -29,9 +28,8 @@ def generate_quiz(lesson_content):
     """
 
     response = model.generate_content(prompt)
-    return response.text  # Extract text from the response
+    return response.text
 
-# Example usage
-lesson_text = "Python is a popular programming language known for its readability and versatility."
-quiz = generate_quiz(lesson_text)
-print(quiz)
+# lesson_text = "Python is a popular programming language known for its readability and versatility."
+# quiz = generate_quiz(lesson_text)
+# print(quiz)

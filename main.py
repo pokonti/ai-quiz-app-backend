@@ -5,7 +5,6 @@ import models
 from database import engine, SessionLocal
 from sqlalchemy.orm import Session
 import quiz_generator
-import json
 
 app = FastAPI()
 # models.Base.metadata.drop_all(engine)
@@ -17,7 +16,7 @@ class CourseCreate(BaseModel):
 
 class CourseResponse(CourseCreate):
     id: int
-    lessons: List[int] = []  # List of Lesson IDs
+    lessons: List[int] = []
 
     class Config:
         from_attributes = True
@@ -36,7 +35,7 @@ class LessonResponse(LessonCreate):
 class QuizResponse(BaseModel):
     id: int
     lesson_id: int
-    questions: str  # JSON format
+    questions: str
 
 
 
@@ -109,7 +108,6 @@ def create_lesson(course_id: int, lesson_data: LessonCreate, db: Session = Depen
     db.commit()
     db.refresh(lesson)
 
-    # Generate quiz (You can store it in DB)
     try:
         quiz_questions = quiz_generator.generate_quiz(lesson_data.content)
 
@@ -134,7 +132,7 @@ def get_quiz(lesson_id: int, db: Session = Depends(get_db)):
     if not quiz:
         raise HTTPException(status_code=404, detail="Quiz not found")
 
-    return {"id": quiz.id, "lesson_id": quiz.lesson_id, "questions": quiz.questions}  # Directly return JSON
+    return {"id": quiz.id, "lesson_id": quiz.lesson_id, "questions": quiz.questions}
 
 
 
