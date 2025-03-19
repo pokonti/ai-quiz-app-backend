@@ -1,1 +1,1 @@
-# ai-app-django
+# ai-app
