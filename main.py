@@ -73,6 +73,28 @@ def read_course(course_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Course not found")
     return course
 
+@app.put("/courses/{course_id}", response_model=CourseResponse)
+def update_course(course_id: int, updated_course: CourseCreate, db: Session = Depends(get_db)):
+    course = db.query(models.Course).get(course_id)
+    if not course:
+        raise HTTPException(status_code=404, detail="Course not found")
+
+    course.title = updated_course.title
+    course.description = updated_course.description
+    db.commit()
+    db.refresh(course)
+    return course
+
+@app.delete("/courses/{course_id}")
+def delete_course(course_id: int, db: Session = Depends(get_db)):
+    course = db.query(models.Course).get(course_id)
+    if not course:
+        raise HTTPException(status_code=404, detail="Course not found")
+
+    db.delete(course)
+    db.commit()
+    return {"message": "Course deleted successfully"}
+
 @app.get("/courses/{course_id}/lessons", response_model=List[LessonResponse])
 def get_lessons_by_course(course_id: int, db: Session = Depends(get_db)):
     lessons = db.query(models.Lesson).filter(models.Lesson.course_id == course_id).all()
@@ -97,6 +119,34 @@ def create_lesson(course_id: int, lesson: LessonCreate, db: Session = Depends(ge
 
     return new_lesson
 
+@app.get("/lessons/{lesson_id}", response_model=LessonResponse)
+def read_lesson(lesson_id: int, db: Session = Depends(get_db)):
+    lesson = db.query(models.Lesson).filter(models.Lesson.id == lesson_id).first()
+    if not lesson:
+        raise HTTPException(status_code=404, detail="Lesson not found")
+    return lesson
+
+@app.put("/lessons/{lesson_id}", response_model=LessonResponse)
+def update_lesson(lesson_id: int, updated_lesson: LessonCreate, db: Session = Depends(get_db)):
+    lesson = db.query(models.Lesson).filter(models.Lesson.id == lesson_id).first()
+    if not lesson:
+        raise HTTPException(status_code=404, detail="Lesson not found")
+
+    lesson.title = updated_lesson.title
+    lesson.content = updated_lesson.content
+    db.commit()
+    db.refresh(lesson)
+    return lesson
+
+@app.delete("/lessons/{lesson_id}")
+def delete_lesson(lesson_id: int, db: Session = Depends(get_db)):
+    lesson = db.query(models.Lesson).filter(models.Lesson.id == lesson_id).first()
+    if not lesson:
+        raise HTTPException(status_code=404, detail="Lesson not found")
+
+    db.delete(lesson)
+    db.commit()
+    return {"message": "Lesson deleted successfully"}
 
 @app.post("/courses/{course_id}/lessonsquiz", response_model=LessonResponse)
 def create_lesson(course_id: int, lesson_data: LessonCreate, db: Session = Depends(get_db)):
