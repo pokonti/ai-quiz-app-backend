@@ -1,7 +1,15 @@
 import google.generativeai as genai
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+
+# Get API key
+api_key = os.getenv("API_KEY")
 
 # Configure API key
-genai.configure(api_key="AIzaSyA53JF_Q2FgfbAg0Lur4--eBkq_tscBJDY")
+genai.configure(api_key=api_key)
 
 def generate_quiz(lesson_content):
     """Generate a quiz using Gemini AI"""
