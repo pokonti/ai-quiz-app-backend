@@ -58,8 +58,8 @@ The API will be available at: [http://127.0.0.1:8000](http://127.0.0.1:8000)
 ## API Endpoints
 
 ### Authentication
-- **POST `/register/`** - Register a new user
-- **POST `/token/`** - Login and get an access token
+- **POST `auth/register/`** - Register a new user
+- **POST `auth/login/`** - Login and get an access token
 
 ### Courses
 - **POST `/courses/`** - Create a new course
