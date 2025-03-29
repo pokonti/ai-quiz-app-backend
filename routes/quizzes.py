@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-import models, schemas
-from database import get_db
-import quiz_generator
+from db import models, schemas
+from db.database import get_db
+from service import quiz_generator
 import json
 router = APIRouter(prefix="/quiz", tags=["Quiz"])
 

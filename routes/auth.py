@@ -8,11 +8,11 @@ import jwt
 from passlib.context import CryptContext
 from datetime import datetime, timedelta, timezone
 
-from database import get_db
-import models
+from db.database import get_db
+from db import models
 from sqlalchemy.orm import Session
 
-from schemas import User, UserCreate
+from db.schemas import User, UserCreate
 load_dotenv()
 
 SECRET_KEY = os.getenv("SECRET_KEY")

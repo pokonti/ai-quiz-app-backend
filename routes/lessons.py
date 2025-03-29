@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from database import get_db
-import models
-from schemas import LessonCreate, LessonResponse
+from db.database import get_db
+from db import models
+from db.schemas import LessonCreate, LessonResponse
 from typing import List
 
 router = APIRouter(prefix="/lessons", tags=["Lessons"])

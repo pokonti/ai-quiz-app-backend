@@ -1,11 +1,10 @@
 from typing import Annotated, List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from database import get_db
-import models
-import quiz_generator
+from db.database import get_db
+from db import models
 from routes.auth import get_current_active_user
-from schemas import CourseCreate, CourseResponse, LessonCreate, LessonResponse, User
+from db.schemas import CourseCreate, CourseResponse, LessonCreate, LessonResponse, User
 
 router = APIRouter(prefix="/courses", tags=["Courses"])
 

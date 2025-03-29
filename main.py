@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Depends
 from typing import Annotated
-import models
-from database import engine, get_db
+from db import models
+from db.database import engine, get_db
 from sqlalchemy.orm import Session
 from routes.courses import router as courses_router
 from routes.auth import router as auth_router
