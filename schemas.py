@@ -44,8 +44,12 @@ class LessonResponse(LessonCreate):
     class Config:
         from_attributes = True
 
+class Question(BaseModel):
+    question: str
+    options: List[str]
+    answer: str
+
 class QuizResponse(BaseModel):
     id: int
     lesson_id: int
-    questions: str
-
+    questions: List[Question]

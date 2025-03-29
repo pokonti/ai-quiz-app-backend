@@ -17,22 +17,35 @@ def generate_quiz(lesson_content):
     model = genai.GenerativeModel("gemini-1.5-pro-latest")
 
     prompt = f"""
-    Generate a quiz in JSON format with 3 multiple-choice questions from the given lesson content.
-    Each question should have 4 answer choices and 1 correct answer.
+    Generate a quiz in JSON format based on the given lesson content.  
+    The quiz should contain exactly 3 multiple-choice questions.  
+
+    Quiz Format:
+    - Each question should have 4 answer choices labeled A, B, C, and D.  
+    - One of the choices should be the correct answer.  
 
     Lesson Content:
     {lesson_content}
 
-    Ensure the output is a valid JSON array of objects.
+    Output Format:
+    Return a valid JSON array containing objects with the following structure:  
 
-    JSON Format:
     [
       {{
-        "question": "<question>",
-        "options": ["A) <option>", "B) <option>", "C) <option>", "D) <option>"],
-        "answer": "<correct_option>"
+        "question": "<question_text>",
+        "options": [
+          "A) <option_1>",
+          "B) <option_2>",
+          "C) <option_3>",
+          "D) <option_4>"
+        ],
+        "answer": "<correct_option_text>"
       }}
     ]
+    Important Instructions:
+    1. Do not include any extra text or explanations—only return raw JSON.  
+    2. Do not format the output with triple backticks (```json) or markdown.  
+    3. The output must be valid JSON, directly parsable in Python or JavaScript.  
     """
 
     response = model.generate_content(prompt)

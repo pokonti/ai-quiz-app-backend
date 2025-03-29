@@ -10,7 +10,7 @@ from datetime import datetime, timedelta, timezone
 
 from database import get_db
 import models
-from requests import Session
+from sqlalchemy.orm import Session
 
 from schemas import User, UserCreate
 load_dotenv()

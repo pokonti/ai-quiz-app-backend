@@ -1,10 +1,18 @@
 from fastapi import APIRouter, Depends, HTTPException
-from requests import Session
+from sqlalchemy.orm import Session
 from database import get_db
 import models
-from schemas import LessonCreate, LessonResponse, QuizResponse
+from schemas import LessonCreate, LessonResponse
+from typing import List
 
 router = APIRouter(prefix="/lessons", tags=["Lessons"])
+
+@router.get("/", response_model=List[LessonResponse])
+def get_all_lessons(db: Session = Depends(get_db)):
+    lessons = db.query(models.Lesson).all()
+    if not lessons:
+        raise HTTPException(status_code=404, detail="No lessons found")
+    return lessons
 
 @router.get("/{lesson_id}", response_model=LessonResponse)
 def read_lesson(lesson_id: int, db: Session = Depends(get_db)):
@@ -35,12 +43,5 @@ def delete_lesson(lesson_id: int, db: Session = Depends(get_db)):
     db.commit()
     return {"message": "Lesson deleted successfully"}
 
-@router.get("/{lesson_id}/quiz", response_model=QuizResponse)
-def get_quiz(lesson_id: int, db: Session = Depends(get_db)):
-    """Retrieve quiz for a specific lesson"""
-    quiz = db.query(models.Quiz).filter(models.Quiz.lesson_id == lesson_id).first()
-    if not quiz:
-        raise HTTPException(status_code=404, detail="Quiz not found")
 
-    return {"id": quiz.id, "lesson_id": quiz.lesson_id, "questions": quiz.questions}
 

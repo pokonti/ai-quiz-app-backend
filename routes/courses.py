@@ -1,6 +1,6 @@
 from typing import Annotated, List
 from fastapi import APIRouter, Depends, HTTPException
-from requests import Session
+from sqlalchemy.orm import Session
 from database import get_db
 import models
 import quiz_generator
@@ -73,29 +73,4 @@ def create_lesson(course_id: int, lesson: LessonCreate, db: Session = Depends(ge
     db.refresh(new_lesson)
 
     return new_lesson
-
-@router.post("/{course_id}/lessonsquiz", response_model=LessonResponse)
-def create_lesson(course_id: int, lesson_data: LessonCreate, db: Session = Depends(get_db)):
-    """Create a new lesson and generate a quiz for it"""
-
-    # Create lesson
-    lesson = models.Lesson(**lesson_data.dict(), course_id=course_id)
-    db.add(lesson)
-    db.commit()
-    db.refresh(lesson)
-
-    try:
-        quiz_questions = quiz_generator.generate_quiz(lesson_data.content)
-
-        # Save quiz in database
-        quiz = models.Quiz(lesson_id=lesson.id, questions=quiz_questions)
-        db.add(quiz)
-        db.commit()
-        db.refresh(quiz)
-
-        # print("Generated Quiz:", quiz_questions)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error generating quiz: {str(e)}")
-
-    return {"id": lesson.id, "title": lesson.title, "content": lesson.content, "course_id": lesson.course_id, "quiz_id": quiz.id}
 
